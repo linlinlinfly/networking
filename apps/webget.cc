@@ -16,9 +16,26 @@ void get_URL(const string &host, const string &path) {
     // Then you'll need to print out everything the server sends back,
     // (not just one call to read() -- everything) until you reach
     // the "eof" (end of file).
+    //建一个sock
 
-    cerr << "Function called: get_URL(" << host << ", " << path << ").\n";
-    cerr << "Warning: get_URL() has not been implemented yet.\n";
+ TCPSocket sock;
+
+    // 进行连接,相当于telnet cs144.keithw.org http
+    sock.connect(Address(host,"http"));
+
+    //传输信息
+    string message("GET "+path+" HTTP/1.1\r\nHost: "+host+"\r\nConnection: close\r\n\r\n");
+    sock.write(message);
+    sock.shutdown(SHUT_WR);
+    //接收传回来的信息不是EOF
+    while(!sock.eof()){
+
+        cout<<sock.read();
+
+    }
+    sock.close();
+	return;
+
 }
 
 int main(int argc, char *argv[]) {
